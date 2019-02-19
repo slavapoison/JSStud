@@ -14,10 +14,12 @@ window.addEventListener('DOMContentLoaded',() => {
         cart.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
+
     function closeCart() {
         cart.style.display = 'none';
         document.body.style.overflow = '';
     }
+    
     open.addEventListener('click',openCart);
     close.addEventListener('click',closeCart);
 
