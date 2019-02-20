@@ -1,5 +1,36 @@
 window.addEventListener('DOMContentLoaded',() => {
-    const cartWrapper = document.querySelector(".cart__wrapper"), 
+
+    const loadContent = async (url,callback) => {
+        await fetch(url)
+            .then(response => response.json())
+            .then(json => createElement(json.goods));
+        callback();
+    }
+    
+    function createElement(arr) {
+        const goodsWrapper = document.querySelector('.goods__wrapper');
+        arr.forEach(function(item){
+            let card = document.createElement('div');
+            card.classList.add('goods__item');
+            card.innerHTML = `
+                <img class="goods__img" src="${item.url}" alt="phone">
+                <div class="goods__colors">Доступно цветов: 4</div>
+                <div class="goods__title">
+                    ${item.title}
+                </div>
+                <div class="goods__price">
+                    <span>${item.price}</span> руб/шт
+                </div>
+                 <button class="goods__btn">Добавить в корзину</button>
+            `;
+            goodsWrapper.appendChild(card);
+        });
+    
+        
+    }
+    
+    loadContent('js/db.json',() => {
+            const cartWrapper = document.querySelector(".cart__wrapper"), 
         cart = document.querySelector(".cart"),
         close = document.querySelector('.cart__close'),
         open = document.querySelector('#cart'),
@@ -33,7 +64,7 @@ window.addEventListener('DOMContentLoaded',() => {
             trigger.remove();
 
             showConfirm();
-            calcGoods(1);
+            
 
             removeBtn.classList.add('goods__item-remove');
             removeBtn.innerHTML = '&times';
@@ -43,6 +74,7 @@ window.addEventListener('DOMContentLoaded',() => {
                  empty.style.display = 'none';
                 //empty.remove();
             }
+            calcGoods();
             calcTotal();
             removeFromCart();
         });
@@ -78,10 +110,10 @@ window.addEventListener('DOMContentLoaded',() => {
         }
     }
 
-    function calcGoods(i) {
+    function calcGoods() {
         const items = cartWrapper.querySelectorAll('.goods__item'),
             empty = cartWrapper.querySelector('.empty');
-        badge.textContent = i + items.length;
+        badge.textContent = items.length;
          if (items.length == 0){
             empty.style.display = 'block';
         }
@@ -107,4 +139,5 @@ window.addEventListener('DOMContentLoaded',() => {
             });
         });
     }
+    });
 });
